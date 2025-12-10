@@ -1,0 +1,44 @@
+version: "3.9"
+
+services:
+  minecraft-server:
+    image: debian:stable-slim
+    container_name: mc-server
+    working_dir: /server/data
+
+    user: "1001:1001"
+    
+    volumes:
+      - ./jdk-25.0.1:/opt/jdk:ro
+      - ./server.jar:/server/server.jar:ro
+      - ./data:/server/data
+
+    environment:
+      JAVA_HOME: "/opt/jdk"
+      PATH: "/opt/jdk/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+      JAVA_XMX: "1536M"
+      JAVA_XMS: "1536M"
+
+    mem_limit: 1600m
+    entrypoint: >
+      /bin/bash -c "
+        echo 'eula=true' > /server/eula.txt ;
+        exec /opt/jdk/bin/java -Xmx$${JAVA_XMX} -Xms$${JAVA_XMS} -jar /server/server.jar nogui"
+    # ports:
+    #   - "127.0.0.1:25565:25565"
+
+    restart: unless-stopped
+  
+  tls-connector-server:
+    image: debian:stable-slim
+    container_name: mc-tls-connector-server
+    working_dir: /opt/tls-connector/server
+    ports:
+      - "5555:5555"
+    volumes:
+      - ./tls-connector:/opt/tls-connector
+    entrypoint: ./tls-connector-server
+
+networks:
+  mc-network:
+    driver: bridge

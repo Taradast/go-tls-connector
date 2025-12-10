@@ -1,0 +1,12 @@
+server:
+  listen_address: "0.0.0.0"
+  listen_port: 5555
+
+backend:
+  laddress: "minecraft-server"
+  port: 25565
+
+tls:
+  ca_cert: "../certs/ca.crt"
+  server_cert: "../certs/server/server.crt"
+  server_key: "../certs/server/server.key"
