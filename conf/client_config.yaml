@@ -1,0 +1,12 @@
+server:
+  address: "example.com"
+  port: 5555
+
+client:
+  listen_address: "127.0.0.1"
+  listen_port: 5554
+
+tls:
+  ca_cert: "../certs/ca.crt"
+  client_cert: "../certs/client/client.crt"
+  client_key: "../certs/client/client.key"
